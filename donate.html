@@ -1,0 +1,136 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link rel="stylesheet" href="styles.css" />
+  <title>API</title>
+</head>
+
+<body>
+
+  <!-- //nav bar -->
+
+  <nav class="site-nav grid">
+
+    <!-- //makes the "API" clickable, linking it back to the home -->
+
+    <a href="index.html">
+      <h1>API</h1>
+
+      <!-- //links "contato" to the footer -->
+
+      <ul>
+        <li><a href="index.html#apis">APIs</li>
+    </a>
+    <li><a href="#social">Contato</a></li>
+    </ul>
+  </nav>
+
+  <!-- //main section -->
+
+  <section id="welcome" class="grid">
+    <div class="welcome-text">
+      <h2>API de Pagamento:<br />PayPal Express Checkout</h2>
+      <p class="leading" style="color: aliceblue">
+      <h3> Quer ajudar a manter a página? Doe com PayPal</p>
+      </h3>
+      <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+
+      <div id="paypal-button"></div>
+
+      <script>
+        paypal.Button.render(
+          {
+            style: {
+              size: "responsive",
+              color: "gold",
+              shape: "pill",
+              label: "paypal",
+              tagline: "true",
+            },
+
+            env: "sandbox", // Or 'production'
+            // Set up the payment:
+            // 1. Add a payment callback
+            payment: function (data, actions) {
+              // 2. Make a request to your server
+              return actions.request
+                .post("create_payment.php")
+                .then(function (res) {
+                  // 3. Return res.id from the response
+                  console.log("create_payment");
+                  console.log(res);
+                  return res.id;
+                });
+            },
+            // Execute the payment:
+            // 1. Add an onAuthorize callback
+            onAuthorize: function (data, actions) {
+              // 2. Make a request to your server
+              return actions.request
+                .post("execute_payment.php", {
+                  paymentID: data.paymentID,
+                  payerID: data.payerID,
+                })
+                .then(function (res) {
+                  console.log("execute_payment");
+                  console.log(res);
+                  // 3. Show the buyer a confirmation message.
+
+                  window.alert("Obrigada por comprar conosco");
+                });
+            },
+          },
+          "#paypal-button"
+        );
+      </script>
+    </div>
+
+    <!-- //image to be rendered in main section -->
+
+    <div class="welcome-img">
+      <img src="assets/api_image19.png" alt="imagem de computador" />
+    </div>
+  </section>
+
+  <!-- //footer -->
+
+  <footer id="social">
+    <div class="grid">
+
+      <!-- //shows why the project was made -->
+
+      <p class="info">
+        Desenvolvido para a aula<br />
+        de Tecnologias para Internet. <br />
+      </p>
+
+      <!-- //displays social media icons, not sure if this fits the project  -->
+
+      <ul class="social">
+
+        <!-- <li>
+            <a href="#"><img src="assets/icon_fb.svg" alt="facebook" /></a>
+          </li>
+          
+          <li>
+            <a href="#"><img src="assets/icon_tw.svg" alt="twitter" /></a>
+          </li> -->
+
+        <p style="font-size: 0.9em">
+
+          <!-- // shows a "get in contact" message -->
+
+          Entre em contato:<br />
+          email@teste.com
+        </p>
+
+      </ul>
+
+    </div>
+  </footer>
+</body>
+
+</html>
